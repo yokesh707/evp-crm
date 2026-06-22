@@ -73,7 +73,7 @@ body{font-family:Georgia,serif;background:#faf5ee;color:#2a1a0e;}
 </style>
 </head>
 <body>
-<button class="fab no-print" onclick="window.print()">🖨️ Save as PDF</button>
+
 <div class="wrap">
 
 <!-- HEADER -->
@@ -94,7 +94,7 @@ body{font-family:Georgia,serif;background:#faf5ee;color:#2a1a0e;}
       <div class="venue-name">EVP Rajeshwari Marriage Palace</div>
       <div class="venue-sub">Premium Wedding & Event Venue</div>
     </div>
-    <div class="contact-info">Poonamalle Trunk Road, Chennai<br>+91 94440 12856<br>Managed by Alangaram Events</div>
+    <div class="contact-info">Poonamalle Trunk Road, Chennai<br>+91 80811 11114<br>Managed by Alangaram Events</div>
   </div>
 </div>
 
@@ -118,7 +118,7 @@ body{font-family:Georgia,serif;background:#faf5ee;color:#2a1a0e;}
   </a>
 </div>
 <div class="action-bar no-print">
-  <button class="btn-pdf" onclick="window.print()">🖨️ Save / Print PDF</button>
+
   <a class="btn-svc" id="svcBtn" href="#" target="_blank">🌸 Our Services</a>
 </div>
 
@@ -159,9 +159,16 @@ body{font-family:Georgia,serif;background:#faf5ee;color:#2a1a0e;}
 <div class="pay-box" id="pay-box" style="display:none">
   <div class="pay-row"><span style="color:#2a6a4a;font-weight:700">50% Advance — Book & Block Date</span><span style="color:#2a6a4a;font-size:16px;font-weight:800" id="pay-adv">₹0</span></div>
   <div class="pay-row" style="border-top:1px solid #c0ddc0;padding-top:8px;margin-top:4px"><span style="color:#7a5c3a;font-weight:700">50% Balance — Due 60 days before event</span><span style="color:#7a5c3a;font-size:16px;font-weight:800" id="pay-bal">₹0</span></div>
-  <div class="pay-note">Payment modes: Cash • UPI / GPay (94440 12856) • NEFT/RTGS • Cheque — "EVP Rajeshwari Marriage Palace"</div>
+  <div class="pay-note">Payment modes: Cash • UPI / GPay (80811 11114) • NEFT/RTGS • Cheque — "EVP Rajeshwari Marriage Palace"</div>
 </div>
 
+<!-- PAYMENT STATUS -->
+<div class="sec" id="paid-sec" style="display:none">Payment Status</div>
+<div id="paid-box" style="display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:14px 18px;margin-bottom:10px">
+  <div class="pay-row"><span style="color:#1b5e20;font-weight:700">&#10003; Amount Received</span><span style="color:#2e7d32;font-size:16px;font-weight:800" id="paid-rcvd">&#8377;0</span></div>
+  <div class="pay-row" id="paid-bal-row" style="border-top:1px solid #a5d6a7;padding-top:8px;margin-top:4px;display:none"><span style="color:#c62828;font-weight:700">&#8987; Balance Remaining</span><span style="color:#c62828;font-size:16px;font-weight:800" id="paid-rem">&#8377;0</span></div>
+  <div class="pay-row" id="paid-clear-row" style="border-top:1px solid #a5d6a7;padding-top:8px;margin-top:4px;display:none"><span style="color:#1b5e20;font-weight:700">&#10003; Fully Paid — Thank You!</span><span style="color:#2e7d32;font-size:16px;font-weight:800">CLEARED</span></div>
+</div>
 <!-- TERMS -->
 <div class="sec">Terms & Conditions</div>
 <div class="terms-box"><ul>
@@ -184,7 +191,7 @@ body{font-family:Georgia,serif;background:#faf5ee;color:#2a1a0e;}
 </div><!-- /body -->
 
 <div class="ftr">
-  <div class="ftr-l">EVP Rajeshwari Marriage Palace • Poonamalle Trunk Road, Chennai • +91 94440 12856<br>Managed by Alangaram Events — Beautiful Moments, Lasting Memories</div>
+  <div class="ftr-l">EVP Rajeshwari Marriage Palace • Poonamalle Trunk Road, Chennai • +91 80811 11114<br>Managed by Alangaram Events — Beautiful Moments, Lasting Memories</div>
   <div class="ftr-r">🙏 Thank you!</div>
 </div>
 </div><!-- /wrap -->
@@ -268,6 +275,21 @@ document.getElementById('svcBtn').href=svcUrl;
 var guestUrl=BASE+'guest.html?'+window.location.search.slice(1);
 var sdb=document.getElementById('saveDateBtn');
 if(sdb)sdb.href=guestUrl;
+
+// Payment received status
+var paid=Number(g('paid'))||0;
+if(paid>0&&grand>0){
+  document.getElementById('paid-sec').style.display='';
+  document.getElementById('paid-box').style.display='';
+  document.getElementById('paid-rcvd').textContent=fm(paid);
+  var rem=Math.max(0,grand-paid);
+  if(rem>0){
+    document.getElementById('paid-bal-row').style.display='flex';
+    document.getElementById('paid-rem').textContent=fm(rem);
+  }else{
+    document.getElementById('paid-clear-row').style.display='flex';
+  }
+}
 </script>
 </body>
 </html>

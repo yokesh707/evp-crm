@@ -286,7 +286,8 @@ function daychip(d){var n=daysto(d);if(n==null)return bdg('#887060','rgba(136,11
 function svbdg(k,note){var sv=null;for(var i=0;i<SVCS.length;i++)if(SVCS[i].k===k){sv=SVCS[i];break;}if(!sv)return '';var lbl=(k==='other'&&note)?'Other: '+note:sv.l;return '<span style="background:'+sv.c+'18;color:'+sv.c+';border:1px solid '+sv.c+'28;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:600;margin-right:4px;display:inline-block">'+xe(lbl)+'</span>';}
 function flead(id){for(var i=0;i<DATA.leads.length;i++)if(DATA.leads[i].id===id)return DATA.leads[i];return null;}
 function fbkg(id){for(var i=0;i<DATA.bookings.length;i++)if(DATA.bookings[i].id===id)return DATA.bookings[i];return null;}
-function decorPaid(b){var d=(b&&b.decor)||{};var pays=d.payments||{};return(Number((pays.finalised||{}).amount)||0)+(Number((pays.production||{}).amount)||0)+(Number((pays.pay1||{}).amount)||0)+(Number((pays.pay2||{}).amount)||0);}
+function decorPaid(b){var d=(b&&b.decor)||{};var pays=d.payments||{};return(Number((pays.pay1||{}).amount)||0)+(Number((pays.pay2||{}).amount)||0)+(Number((pays.pay3||{}).amount)||0)+(Number((pays.pay4||{}).amount)||0);}
+function decorFinalised(b){var d=(b&&b.decor)||{};var pays=d.payments||{};var fin=Number((pays.finalised||{}).amount)||0;return fin||Number(d.budget)||0;}
 function fdec(id){for(var i=0;i<DATA.decors.length;i++)if(DATA.decors[i].id===id)return DATA.decors[i];return null;}
 
 // ── PDF QUOTATION GENERATOR ──────────────────────────────────────────────────
@@ -336,7 +337,7 @@ function buildPDFQuote(src,type){
   h+='<div class="wrap">';
   // Header
   h+='<div class="hdr"><div class="hdr-top"><img src="'+evpLogo+'" style="height:70px;object-fit:contain" alt="EVP Rajeshwari"><div class="hdr-right"><div>QUOTATION</div><div>'+qn+'</div></div></div>';
-  h+='<div class="hdr-bottom"><div><div class="venue-name">EVP Rajeshwari Marriage Palace</div><div class="venue-sub">Premium Wedding &amp; Event Venue</div></div><div class="contact-right">Poonamalle Trunk Road, Chennai<br>+91 94440 12856<br>Managed by Alangaram Events</div></div></div>';
+  h+='<div class="hdr-bottom"><div><div class="venue-name">EVP Rajeshwari Marriage Palace</div><div class="venue-sub">Premium Wedding &amp; Event Venue</div></div><div class="contact-right">Poonamalle Trunk Road, Chennai<br>+91 80811 11114<br>Managed by Alangaram Events</div></div></div>';
   // Meta strip
   h+='<div class="meta"><div class="meta-item"><div class="meta-label">Date</div><div class="meta-val">'+qd+'</div></div><div class="meta-item"><div class="meta-label">Valid For</div><div class="meta-val" style="color:#c8922a">30 Days</div></div><div class="meta-item"><div class="meta-label">Prepared by</div><div class="meta-val">'+(src.agentName||'Alangaram Events')+'</div></div></div>';
   h+='<div class="body">';
@@ -375,7 +376,7 @@ function buildPDFQuote(src,type){
     h+='<div class="sec">Payment Schedule</div><div class="pay-box">';
     h+='<div class="pay-row"><span style="color:#2a6a4a;font-weight:700">50% Advance — Book &amp; Block Date</span><span style="color:#2a6a4a;font-size:16px;font-weight:800">\u20b9'+adv.toLocaleString('en-IN')+'</span></div>';
     h+='<div class="pay-row" style="border-top:1px solid #c0ddc0;padding-top:8px;margin-top:4px"><span style="color:#7a5c3a;font-weight:700">50% Balance — Due 60 days before event</span><span style="color:#7a5c3a;font-size:16px;font-weight:800">\u20b9'+(grand-adv).toLocaleString('en-IN')+'</span></div>';
-    h+='<div style="font-size:11px;color:#6a8a7a;margin-top:10px;border-top:1px solid #c0ddc0;padding-top:8px">Payment modes: Cash &bull; UPI / GPay (94440 12856) &bull; NEFT/RTGS &bull; Cheque — \u201cEVP Rajeshwari Marriage Palace\u201d</div></div>';
+    h+='<div style="font-size:11px;color:#6a8a7a;margin-top:10px;border-top:1px solid #c0ddc0;padding-top:8px">Payment modes: Cash &bull; UPI / GPay (80811 11114) &bull; NEFT/RTGS &bull; Cheque — \u201cEVP Rajeshwari Marriage Palace\u201d</div></div>';
   }
   // Terms
   h+='<div class="sec">Terms &amp; Conditions</div><div class="terms-box"><ul>';
@@ -391,7 +392,7 @@ function buildPDFQuote(src,type){
   // Signature
   h+='<div class="sign-row"><div class="sign-box"><div class="sign-line"></div><div class="sign-label">Client Signature &amp; Date</div></div><div class="sign-box"><div class="sign-line"></div><div class="sign-label">Alangaram Events — Authorised Signatory</div></div></div>';
   h+='</div>'; // body
-  h+='<div class="ftr"><div class="ftr-l">EVP Rajeshwari Marriage Palace &bull; Poonamalle Trunk Road, Chennai &bull; +91 94440 12856<br>Managed by Alangaram Events &bull; Beautiful Moments, Lasting Memories</div><div class="ftr-r">\uD83D\uDE4F Thank you!</div></div>';
+  h+='<div class="ftr"><div class="ftr-l">EVP Rajeshwari Marriage Palace &bull; Poonamalle Trunk Road, Chennai &bull; +91 80811 11114<br>Managed by Alangaram Events &bull; Beautiful Moments, Lasting Memories</div><div class="ftr-r">\uD83D\uDE4F Thank you!</div></div>';
   h+='</div></body></html>';
   return h;
 }
@@ -570,7 +571,7 @@ function renderDash(){
     h+='<div style="margin-bottom:5px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span>Bookings</span><span style="color:var(--gold)">'+_mB+'/'+TGTS.b+'</span></div>'+pbar(_mB,TGTS.b,_mB>=TGTS.b?'var(--gr)':'var(--gold)')+'</div>';
     h+='<div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span>Revenue</span><span style="color:var(--or)">'+fm(_mR)+'/'+fm(TGTS.r)+'</span></div>'+pbar(_mR,TGTS.r,_mR>=TGTS.r?'var(--gr)':'var(--or)')+'</div></div></div>';
     var _tC=DATA.bookings.reduce(function(s,b){return s+paidof(b);},0),_tP=DATA.bookings.reduce(function(s,b){return s+calcp(b).bal;},0),_tR=DATA.bookings.reduce(function(s,b){return s+calcp(b).grand;},0),_tD=DATA.bookings.reduce(function(s,b){return s+Number(b.depositAmount||0);},0);
-    var _tDB=DATA.bookings.reduce(function(s,b){return s+(Number((b.decor&&b.decor.budget)||0));},0);
+    var _tDB=DATA.bookings.reduce(function(s,b){var _f=decorFinalised(b),_ad=Number((b.decor&&b.decor.addon)||0),_dc=Number((b.decor&&b.decor.discount)||0);return s+Math.max(0,_f+_ad-_dc);},0);
     var _tDP=DATA.bookings.reduce(function(s,b){return s+decorPaid(b);},0);
     h+='<div class="card" style="padding:12px;margin-bottom:10px"><div class="stit">Business Summary</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">';
     h+='<div style="background:var(--gRF);border:1px solid rgba(90,158,111,.3);border-radius:7px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--mu)">COLLECTED</div><div style="color:var(--gr);font-weight:800;font-size:13px">'+fm(_tC)+'</div></div>';
@@ -580,38 +581,64 @@ function renderDash(){
     h+='</div>';
     h+='</div>';
     // ── DECORATION KPI TILES ────────────────────────────────────────────────────
-    var _decorPending=DATA.bookings.filter(function(b){var _db=Number((b.decor&&b.decor.budget)||0);return _db>0&&decorPaid(b)<_db;});
+    var _decorPending=DATA.bookings.filter(function(b){var _f=decorFinalised(b),_ad=Number((b.decor&&b.decor.addon)||0),_dc=Number((b.decor&&b.decor.discount)||0);var _adj=Math.max(0,_f+_ad-_dc);return _adj>0&&decorPaid(b)<_adj;});
     h+='<div class="card" style="padding:12px;margin-bottom:10px;border-left:3px solid #e060a0">';
     h+='<div class="stit" style="color:#c04080">&#127800; Alangaram Decor Payments</div>';
+    var _tDBalance=Math.max(0,_tDB-_tDP);
     h+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:'+(_decorPending.length?'12':'0')+'px">';
     h+='<div style="background:rgba(200,80,160,.12);border:1px solid rgba(200,80,160,.3);border-radius:8px;padding:10px;text-align:center">';
     h+='<div style="font-size:19px;margin-bottom:3px">&#127800;</div>';
     h+='<div style="color:#c04080;font-weight:800;font-size:'+(fm(_tDB).length>8?'11':'14')+'px">'+fm(_tDB)+'</div>';
-    h+='<div style="font-size:9px;color:var(--mu);margin-top:2px;font-weight:700">TOTAL BUDGET</div></div>';
+    h+='<div style="font-size:9px;color:var(--mu);margin-top:2px;font-weight:700">FINALISED</div></div>';
     h+='<div style="background:rgba(90,158,111,.12);border:1px solid rgba(90,158,111,.3);border-radius:8px;padding:10px;text-align:center">';
     h+='<div style="font-size:19px;margin-bottom:3px">&#10003;</div>';
     h+='<div style="color:var(--gr);font-weight:800;font-size:'+(fm(_tDP).length>8?'11':'14')+'px">'+fm(_tDP)+'</div>';
     h+='<div style="font-size:9px;color:var(--mu);margin-top:2px;font-weight:700">RECEIVED</div></div>';
-    h+='<div style="background:'+(Math.max(0,_tDB-_tDP)>0?'var(--rF)':'var(--gRF)')+';border:1px solid '+(Math.max(0,_tDB-_tDP)>0?'rgba(200,64,48,.3)':'rgba(90,158,111,.3)')+';border-radius:8px;padding:10px;text-align:center">';
-    h+='<div style="font-size:19px;margin-bottom:3px">'+(Math.max(0,_tDB-_tDP)>0?'&#9203;':'&#9989;')+'</div>';
-    h+='<div style="color:'+(Math.max(0,_tDB-_tDP)>0?'var(--rd)':'var(--gr)')+';font-weight:800;font-size:'+(fm(Math.max(0,_tDB-_tDP)).length>8?'11':'14')+'px">'+fm(Math.max(0,_tDB-_tDP))+'</div>';
-    h+='<div style="font-size:9px;color:var(--mu);margin-top:2px;font-weight:700">PENDING</div></div>';
+    h+='<div style="background:'+(_tDBalance>0?'var(--rF)':'var(--gRF)')+';border:1px solid '+(_tDBalance>0?'rgba(200,64,48,.3)':'rgba(90,158,111,.3)')+';border-radius:8px;padding:10px;text-align:center">';
+    h+='<div style="font-size:19px;margin-bottom:3px">'+(_tDBalance>0?'&#9203;':'&#9989;')+'</div>';
+    h+='<div style="color:'+(_tDBalance>0?'var(--rd)':'var(--gr)')+';font-weight:800;font-size:'+(fm(_tDBalance).length>8?'11':'14')+'px">'+fm(_tDBalance)+'</div>';
+    h+='<div style="font-size:9px;color:var(--mu);margin-top:2px;font-weight:700">BALANCE</div></div>';
     h+='</div>';
     if(_decorPending.length){
       h+='<div style="font-size:10px;font-weight:700;color:#c04080;margin-bottom:7px">&#9888; Pending Decor Payments ('+_decorPending.length+' bookings)</div>';
       _decorPending.forEach(function(b){
-        var _db=Number((b.decor&&b.decor.budget)||0),_dp=decorPaid(b),_ddue=_db-_dp;
+        var _f2=decorFinalised(b),_ad2=Number((b.decor&&b.decor.addon)||0),_dc2=Number((b.decor&&b.decor.discount)||0);var _db=Math.max(0,_f2+_ad2-_dc2),_dp=decorPaid(b),_ddue=_db-_dp;
         h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:rgba(200,80,160,.07);border:1px solid rgba(200,80,160,.2);border-radius:7px;margin-bottom:5px;cursor:pointer" onclick="navBkg(\''+b.id+'\')">'+
           '<div><div style="font-weight:700;font-size:13px">'+xe(b.name)+'</div><div style="color:var(--mu);font-size:10px">'+fd(b.startDate)+(b.decor&&b.decor.status?' &bull; '+xe(b.decor.status):'')+'</div></div>'+
           '<div style="text-align:right"><div style="color:var(--rd);font-weight:800;font-size:13px">'+fm(_ddue)+' due</div><div style="font-size:9px;color:var(--mu)">Paid: '+fm(_dp)+' / '+fm(_db)+'</div></div>'+
           '</div>';
       });
-    }else if(_tDB===0){
+    }else if(_tDB===0&&_tDP===0){
       h+='<div style="text-align:center;padding:8px;color:var(--mu);font-size:11px">Open a booking &rarr; Edit &rarr; Decoration to add decor details</div>';
     }else{
       h+='<div style="text-align:center;padding:6px;color:var(--gr);font-size:12px;font-weight:700">&#10003; All decor payments cleared</div>';
     }
     h+='</div>';
+    // ── STANDALONE DECOR DASHBOARD ─────────────────────────────────────────────
+    if(DATA.decors.length>0){
+      var _dcTot=DATA.decors.length;
+      var _dcContacted=DATA.decors.filter(function(d){return d.status!=='enquiry';}).length;
+      var _dcToContact=DATA.decors.filter(function(d){return d.status==='enquiry';}).length;
+      var _dcRcvd=DATA.decors.reduce(function(s,d){return s+fdecPaid(d);},0);
+      var _dcBudget=DATA.decors.reduce(function(s,d){return s+Number(d.budget||0);},0);
+      var _dcDue=Math.max(0,_dcBudget-_dcRcvd);
+      var _todStr=today();
+      var _dcOverdue=DATA.decors.filter(function(d){return d.eventDate&&d.eventDate<_todStr&&fdecPaid(d)<Number(d.budget||0)&&d.status!=='completed'&&d.status!=='cancelled';});
+      h+='<div class="card" style="padding:12px;margin-bottom:10px;border-left:3px solid #9060c8">';
+      h+='<div class="stit" style="color:var(--pu)">&#127800; Alangaram Decor Overview</div>';
+      h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">';
+      h+='<div style="background:rgba(88,128,200,.1);border:1px solid rgba(88,128,200,.3);border-radius:7px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--mu)">CLIENTS CONTACTED</div><div style="color:var(--bl);font-weight:800;font-size:17px">'+_dcContacted+'</div><div style="font-size:9px;color:var(--mu)">of '+_dcTot+' total</div></div>';
+      h+='<div style="background:rgba(208,112,48,.1);border:1px solid rgba(208,112,48,.3);border-radius:7px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--mu)">YET TO CONTACT</div><div style="color:var(--or);font-weight:800;font-size:17px">'+_dcToContact+'</div><div style="font-size:9px;color:var(--mu)">enquiries</div></div>';
+      h+='<div style="background:rgba(90,158,111,.1);border:1px solid rgba(90,158,111,.3);border-radius:7px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--mu)">AMOUNT RECEIVED</div><div style="color:var(--gr);font-weight:800;font-size:'+(fm(_dcRcvd).length>9?'12':'14')+'px">'+fm(_dcRcvd)+'</div></div>';
+      h+='<div style="background:rgba(200,64,48,.1);border:1px solid rgba(200,64,48,.3);border-radius:7px;padding:9px;text-align:center"><div style="font-size:9px;color:var(--mu)">YET TO RECEIVE</div><div style="color:var(--rd);font-weight:800;font-size:'+(fm(_dcDue).length>9?'12':'14')+'px">'+fm(_dcDue)+'</div></div>';
+      h+='</div>';
+      if(_dcOverdue.length>0){
+        h+='<div style="background:var(--rF);border:1px solid rgba(200,64,48,.35);border-radius:8px;padding:10px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><b style="color:var(--rd);font-size:12px">&#9888; Overdue Decor Payments ('+_dcOverdue.length+')</b></div>';
+        _dcOverdue.forEach(function(d){var _dp2=fdecPaid(d),_dd=Number(d.budget||0)-_dp2;h+='<div style="display:flex;justify-content:space-between;padding:3px 0;cursor:pointer" onclick="go(\'decor\')"><span style="font-size:12px;color:var(--cr)">'+xe(d.clientName||'')+'</span><span style="color:var(--rd);font-weight:700;font-size:12px">'+fm(_dd)+' due</span></div>';});
+        h+='</div>';
+      }
+      h+='</div>';
+    }
   }
   return h;
 }
@@ -666,7 +693,7 @@ function renderLeads(){
 }
 
 // ── DECORATION TRACKER ────────────────────────────────────────────────────────
-var DECOR_STAGES=['Decor Finalised','Production Cost','1st Payment','2nd Payment'];
+var DECOR_STAGES=['Decor Finalised','1st Payment','2nd Payment','3rd Payment','4th Payment'];
 var DECOR_STATUS=[{k:'enquiry',l:'Enquiry',c:'#6878A0'},{k:'confirmed',l:'Confirmed',c:'#5A9E6F'},{k:'inprogress',l:'In Progress',c:'#E8B84B'},{k:'completed',l:'Completed',c:'#30A090'},{k:'cancelled',l:'Cancelled',c:'#C84030'}];
 function gdstat(k){for(var i=0;i<DECOR_STATUS.length;i++)if(DECOR_STATUS[i].k===k)return DECOR_STATUS[i];return DECOR_STATUS[0];}
 function fdecPaid(d){return (d.decPayments||[]).reduce(function(s,p){return s+(Number(p.amount)||0);},0);}
@@ -710,7 +737,7 @@ function renderDecors(){
     if(budget>0&&totalPaid>0)h+=pbar(totalPaid,budget,'var(--pu)');
     if(d.notes)h+='<div style="font-size:11px;color:var(--mu);margin-top:4px;font-style:italic">'+xe(d.notes)+'</div>';
     h+='<div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap">';
-    if(d.phone){var _dph=(d.phone||'').replace(/[^0-9]/g,'');var _durl='https://wa.me/'+(_dph.length>10&&_dph.indexOf('91')===0?_dph:'91'+_dph)+'?text='+encodeURIComponent('Hi '+d.clientName+', Greetings from Alangaram Events! Regarding your decoration booking.');h+='<a class="btn bwa sm" href="'+_durl+'" target="_blank">&#128172; WA</a>';}
+    if(d.phone){var _dph=(d.phone||'').replace(/[^0-9]/g,'');var _durl='https://wa.me/'+(_dph.length>10&&_dph.indexOf('91')===0?_dph:'91'+_dph)+'?text='+encodeURIComponent('Hi '+d.clientName+', Greetings from Alangaram Events! Regarding your decoration booking.');var _waRemind='*Alangaram Events*\n\nDear *'+d.clientName+'*,\n\nReminder: Your decoration booking balance is due.\n\nKindly contact us:\n\ud83d\udcde 80811 11114\n\n\u2014 Alangaram Events';h+='<a class="btn bwa sm" href="https://wa.me/'+(_dph.length>10&&_dph.indexOf(\'91\')=== 0?_dph:\'91\'+_dph)+\'?text=\'+encodeURIComponent(_waRemind)+\'" target="_blank">&#128172; WA</a>';}
     if(d.phone)h+='<a class="btn bsu sm" href="tel:'+xe(d.phone)+'" style="text-decoration:none">&#128222; Call</a>';
     h+='<button class="btn bs sm" data-action="edit-decor" data-id="'+d.id+'">&#9998; Edit</button>';
     h+='<button class="btn bp sm" data-action="add-decor-pay" data-id="'+d.id+'">+ Payment</button>';
@@ -761,31 +788,53 @@ var DECOR_STATUSES2=['Pending','Confirmed','In Progress','Completed','Cancelled'
 function renderBkgDecorForm(){
   var b=fbkg(EDIT_ID)||{},_dec=b.decor||{},_pays=_dec.payments||{};
   var _fin=Number((_pays.finalised||{}).amount)||0;
-  var _pro=Number((_pays.production||{}).amount)||0;
+  var _disc=Number(_dec.discount)||0;
+  var _addon=Number(_dec.addon)||0;
   var _p1=Number((_pays.pay1||{}).amount)||0;
   var _p2=Number((_pays.pay2||{}).amount)||0;
-  var _totalPaid=_p1+_p2;
-  var _balance=Math.max(0,_fin-_totalPaid);
+  var _p3=Number((_pays.pay3||{}).amount)||0;
+  var _p4=Number((_pays.pay4||{}).amount)||0;
+  var _totalPaid=_p1+_p2+_p3+_p4;
+  var _adjFin=Math.max(0,_fin+_addon-_disc);
+  var _balance=Math.max(0,_adjFin-_totalPaid);
+  var _ph=(b.phone||'').replace(/[^0-9]/g,'');
+  var _intl=_ph.length>10&&_ph.indexOf('91')===0?_ph:'91'+_ph;
   var h='<div class="ovhdr"><h2>&#127800; Decoration — '+xe(b.name||'Booking')+'</h2><button class="ovcl" onclick="closeOv()">&#215;</button></div>';
-  h+='<div class="g2"><div class="fg"><label class="fl">Decor Budget (&#8377;)</label><input class="inp" type="number" id="bd-budget" placeholder="0" value="'+xe(_dec.budget||'')+'" oninput="updDecorBalance()"></div>';
+  h+='<div class="g2"><div class="fg"><label class="fl">Decor Budget (&#8377;)</label><input class="inp" type="number" id="bd-budget" placeholder="0" value="'+xe(_dec.budget||'')+'"></div>';
   h+='<div class="fg"><label class="fl">Decorator / Agent</label><input class="inp" id="bd-agent" placeholder="Name..." value="'+xe(_dec.agent||'')+'"></div></div>';
   h+='<div class="fg"><label class="fl">Status</label><select class="sel" id="bd-status">';
   DECOR_STATUSES2.forEach(function(s){h+='<option'+(_dec.status===s?' selected':'')+'>'+s+'</option>';});
   h+='</select></div>';
   h+='<div class="stit" style="color:#c04080">Payment Stages</div>';
-  // Payment stages with live balance
-  h+='<div class="g2" style="margin-bottom:8px"><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Decor Finalised / Total (&#8377;)</label><input class="inp" type="number" id="bd-pf" placeholder="0" value="'+xe((_pays.finalised||{}).amount||'')+'" oninput="updDecorBalance()"></div><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Date</label><input class="inp" type="date" id="bd-pfd" value="'+xe((_pays.finalised||{}).date||'')+'"></div></div>';
-  h+='<div class="g2" style="margin-bottom:8px"><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Production Cost (&#8377;)</label><input class="inp" type="number" id="bd-pp" placeholder="0" value="'+xe((_pays.production||{}).amount||'')+'"></div><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Date</label><input class="inp" type="date" id="bd-ppd" value="'+xe((_pays.production||{}).date||'')+'"></div></div>';
-  h+='<div class="g2" style="margin-bottom:8px"><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">1st Payment (&#8377;)</label><input class="inp" type="number" id="bd-p1" placeholder="0" value="'+xe((_pays.pay1||{}).amount||'')+'" oninput="updDecorBalance()"></div><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Date</label><input class="inp" type="date" id="bd-p1d" value="'+xe((_pays.pay1||{}).date||'')+'"></div></div>';
-  h+='<div class="g2" style="margin-bottom:10px"><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">2nd Payment (&#8377;)</label><input class="inp" type="number" id="bd-p2" placeholder="0" value="'+xe((_pays.pay2||{}).amount||'')+'" oninput="updDecorBalance()"></div><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Date</label><input class="inp" type="date" id="bd-p2d" value="'+xe((_pays.pay2||{}).date||'')+'"></div></div>';
-  // Live balance card
+  h+='<div class="g2" style="margin-bottom:8px"><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">&#127800; Total Finalised (&#8377;)</label><input class="inp" type="number" id="bd-pf" placeholder="0" value="'+xe((_pays.finalised||{}).amount||'')+'" oninput="updDecorBalance()"></div><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Date</label><input class="inp" type="date" id="bd-pfd" value="'+xe((_pays.finalised||{}).date||'')+'"></div></div>';
+  h+='<div class="g2" style="margin-bottom:10px"><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Discount (&#8377;)</label><input class="inp" type="number" id="bd-disc" placeholder="0" value="'+xe(_dec.discount||'')+'" oninput="updDecorBalance()"></div><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Add-ons (&#8377;)</label><input class="inp" type="number" id="bd-addon" placeholder="0" value="'+xe(_dec.addon||'')+'" oninput="updDecorBalance()"></div></div>';
+  function payBlock(num,key,pays2){
+    var h2='<div style="background:rgba(200,80,160,.05);border:1px solid rgba(200,80,160,.2);border-radius:8px;padding:10px;margin-bottom:8px">';
+    h2+='<div style="font-size:10px;font-weight:700;color:#c04080;margin-bottom:6px">'+num+' Payment</div>';
+    h2+='<div class="g2" style="margin-bottom:5px"><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Amount (&#8377;)</label><input class="inp" type="number" id="bd-'+key+'" placeholder="0" value="'+xe((pays2||{}).amount||'')+'" oninput="updDecorBalance()"></div><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Date</label><input class="inp" type="date" id="bd-'+key+'d" value="'+xe((pays2||{}).date||'')+'"></div></div>';
+    h2+='<div class="g2"><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Received By</label><input class="inp" id="bd-'+key+'-by" placeholder="Name..." value="'+xe((pays2||{}).receivedBy||'')+'"></div><div class="fg" style="margin:0"><label class="fl" style="font-size:10px">Payment Mode</label><select class="sel" id="bd-'+key+'-mode">';
+    PMETH.forEach(function(m){h2+='<option'+(m===((pays2||{}).mode||PMETH[0])?' selected':'')+'>'+m+'</option>';});
+    h2+='</select></div></div></div>';
+    return h2;
+  }
+  h+=payBlock('1st','p1',_pays.pay1);
+  h+=payBlock('2nd','p2',_pays.pay2);
+  h+=payBlock('3rd','p3',_pays.pay3);
+  h+=payBlock('4th','p4',_pays.pay4);
+  var _balC=_balance>0?'var(--rd)':'var(--gr)';
   h+='<div id="decor-balance-card" style="background:rgba(200,80,160,.1);border:1px solid rgba(200,80,160,.3);border-radius:10px;padding:12px 14px;margin-bottom:10px">';
-  h+='<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:11px;color:#c04080">Total Finalised</span><span style="color:#c04080;font-weight:700" id="db-fin">'+fm(_fin)+'</span></div>';
-  h+='<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:11px;color:var(--mu)">Less: 1st Payment</span><span style="color:var(--mu);font-weight:700" id="db-p1">— '+fm(_p1)+'</span></div>';
-  h+='<div style="display:flex;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid rgba(200,80,160,.2)"><span style="font-size:11px;color:var(--mu)">Less: 2nd Payment</span><span style="color:var(--mu);font-weight:700" id="db-p2">— '+fm(_p2)+'</span></div>';
-  h+='<div style="display:flex;justify-content:space-between;padding-top:8px"><span style="font-size:13px;font-weight:800;color:'+(_balance>0?'var(--rd)':'var(--gr)')+'">Balance Due</span><span style="font-size:16px;font-weight:800;color:'+(_balance>0?'var(--rd)':'var(--gr)')+'" id="db-bal">'+fm(_balance)+'</span></div>';
+  h+='<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:#c04080">Total Finalised</span><span style="color:#c04080;font-weight:700" id="db-fin">'+fm(_fin)+'</span></div>';
+  h+='<div id="db-addon-row" style="display:'+(_addon>0?'flex':'none')+';justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:var(--gr)">Add-ons (+)</span><span style="color:var(--gr);font-weight:700" id="db-addon">+ '+fm(_addon)+'</span></div>';
+  h+='<div id="db-disc-row" style="display:'+(_disc>0?'flex':'none')+';justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:var(--or)">Discount (−)</span><span style="color:var(--or);font-weight:700" id="db-disc">− '+fm(_disc)+'</span></div>';
+  h+='<div style="display:flex;justify-content:space-between;margin-bottom:4px;padding-bottom:8px;border-bottom:1px solid rgba(200,80,160,.2)"><span style="font-size:11px;color:var(--mu)">Total Paid</span><span style="color:var(--mu);font-weight:700" id="db-totpaid">− '+fm(_totalPaid)+'</span></div>';
+  h+='<div style="display:flex;justify-content:space-between;padding-top:6px"><span id="db-ballabel" style="font-size:13px;font-weight:800;color:'+_balC+'">Balance Due</span><span style="font-size:16px;font-weight:800;color:'+_balC+'" id="db-bal">'+fm(_balance)+'</span></div>';
   h+='</div>';
+  h+='<div class="fg"><label class="fl">&#128197; Next Payment Follow-up Date</label><input class="inp" type="date" id="bd-followup" value="'+xe(_dec.followUpDate||'')+'"></div>';
   h+='<div class="fg"><label class="fl">Notes</label><textarea class="ta" id="bd-notes">'+xe(_dec.notes||'')+'</textarea></div>';
+  if(b.phone){
+    var _waMsg='*Alangaram Events & Decor*\n\nDear *'+xe(b.name||'Client')+'*,\n\n💳 *Payment Reminder — Decoration*\n\n🌸 Total Finalised: *'+fm(_adjFin)+'*\n✅ Amount Paid: *'+fm(_totalPaid)+'*\n⏳ Balance Due: *'+fm(_balance)+'*\n\nKindly arrange the balance payment at the earliest.\n\nThank you!\n— Alangaram Events\n📞 80811 11114';
+    h+='<a class="btn bwa bl" style="margin-bottom:10px;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px" href="https://wa.me/'+_intl+'?text='+encodeURIComponent(_waMsg)+'" target="_blank">&#128172; WhatsApp Payment Reminder</a>';
+  }
   h+='<div class="g2" style="margin-top:6px"><button class="btn bg" onclick="closeOv()">Cancel</button><button class="btn bp" style="background:#c04080;border-color:#c04080" onclick="saveBkgDecor()">&#127800; Save Decor</button></div>';
   return h;
 }
@@ -831,7 +880,7 @@ function renderBkgs(){
     h+='<div style="color:'+(p.bal>0?'var(--rd)':'var(--gr)')+';font-size:11px;font-weight:700">'+(p.bal>0?'Due: '+fm(p.bal):'&#10003; Cleared')+'</div>';
     h+='</div></div>';
     // Booking payment bar (green)
-    var _dp=decorPaid(b),_db=(b.decor&&b.decor.budget>0?Number(b.decor.budget):0);
+    var _dp=decorPaid(b),_dfv=decorFinalised(b),_db=Math.max(_dfv,Number((b.decor&&b.decor.budget)||0));
     h+='<div style="font-size:9px;color:var(--mu);margin-bottom:2px">Booking Payment</div>';
     h+=pbar(p.paid,p.grand||1,p.bal===0?'var(--gr)':'var(--gold)');
     h+='<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--mu);margin-bottom:4px"><span>'+fm(p.paid)+' paid</span><span>'+fm(p.bal)+' due</span></div>';
@@ -862,7 +911,8 @@ function renderBkg(){
   var _bid3=b.id;
   var h='';
   h+='<div style="display:flex;gap:7px;margin-bottom:8px;flex-wrap:wrap">';
-  h+='<button class="btn bwa" style="flex:2" onclick="sendWA(\''+_bid3+'\')" >&#128172; Send Quote</button>';
+  h+='<button class="btn bwa" style="flex:2" onclick="sendWA(\''+_bid3+'\')" >&#128172; Quote</button>';
+  if(p.bal>0)h+='<button class="btn" style="flex:2;background:#25D366;color:#fff" onclick="sendPayReminderWA(\''+_bid3+'\')">&#128172; Pay Reminder</button>';
   if(isAdminOrManager())h+='<button class="btn bs" style="flex:1" onclick="editBkg(\''+_bid3+'\')" >&#9998; Edit</button>';
   h+='<button class="btn bg" style="flex:1" onclick="navBkgs()" >&#8592; Back</button>';
   h+='</div>';
@@ -916,37 +966,62 @@ function renderBkg(){
   if(b.services&&b.services.length){h+='<div class="card" style="padding:11px;margin-bottom:10px"><div class="stit">Services</div><div>';b.services.forEach(function(k){h+=svbdg(k,b.otherNote);});h+='</div></div>';}
   // ── DECORATION SECTION ──────────────────────────────────────────────────────
   var _dec=b.decor||{},_dpays=_dec.payments||{};
-  var _df=_dpays.finalised||{},_dpr=_dpays.production||{},_dp1=_dpays.pay1||{},_dp2=_dpays.pay2||{};
-  var _dtotal=decorPaid(b),_dbudget=Number(_dec.budget)||0,_dbal=Math.max(0,_dbudget-_dtotal);
+  var _df=_dpays.finalised||{},_dp1=_dpays.pay1||{},_dp2=_dpays.pay2||{},_dp3=_dpays.pay3||{},_dp4=_dpays.pay4||{};
+  var _dtotal=decorPaid(b),_dfin=decorFinalised(b);
+  var _ddisc=Number(_dec.discount)||0,_daddon=Number(_dec.addon)||0;
+  var _dadjFin=Math.max(0,_dfin+_daddon-_ddisc);
+  var _dbal=Math.max(0,_dadjFin-_dtotal);
+  var _dbudget=Number(_dec.budget)||0;
+  var _bph2=(b.phone||'').replace(/[^0-9]/g,'');var _bintl=_bph2.length>10&&_bph2.indexOf('91')===0?_bph2:'91'+_bph2;
   h+='<div class="card" style="padding:12px;margin-bottom:10px;border-left:3px solid #e060a0">';
   h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
   h+='<div style="font-size:13px;font-weight:800;color:#c04080">&#127800; Decoration Details</div>';
   h+='<button class="btn sm" data-action="edit-bkg-decor" data-id="'+b.id+'" style="background:rgba(200,80,160,.1);border-color:rgba(200,80,160,.4);color:#c04080;font-size:10px">&#9998; Edit</button>';
   h+='</div>';
-  if(_dbudget>0){
+  if(_dfin>0||_dbudget>0){
     h+='<div class="g2" style="margin-bottom:8px">';
-    h+='<div class="ic"><div class="icl">Decor Budget</div><div class="icv" style="color:#c04080">'+fm(_dbudget)+'</div></div>';
+    if(_dbudget>0)h+='<div class="ic"><div class="icl">Budget</div><div class="icv" style="color:#c04080">'+fm(_dbudget)+'</div></div>';
     h+='<div class="ic"><div class="icl">Status</div><div class="icv">'+xe(_dec.status||'Pending')+'</div></div>';
-    if(_dec.agent)h+='<div class="ic"><div class="icl">Decorator</div><div class="icv">'+xe(_dec.agent)+'</div></div>';
+    if(_dec.agent)h+='<div class="ic" style="grid-column:1/-1"><div class="icl">Decorator</div><div class="icv">'+xe(_dec.agent)+'</div></div>';
     h+='</div>';
-    // Payment stages table
-    h+='<div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#c04080;text-transform:uppercase;margin-bottom:6px">Payment Stages</div>';
-    var _dstages=[{k:'finalised',l:'Decor Finalised',d:_df},{k:'production',l:'Production Cost',d:_dpr},{k:'pay1',l:'1st Payment',d:_dp1},{k:'pay2',l:'2nd Payment',d:_dp2}];
+    // Total breakdown
+    if(_dfin>0){
+      h+='<div style="background:rgba(200,80,160,.06);border-radius:7px;padding:9px;margin-bottom:8px">';
+      h+='<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:#c04080;font-weight:700">Total Finalised</span><span style="color:#c04080;font-weight:800">'+fm(_dfin)+'</span></div>';
+      if(_daddon>0)h+='<div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:11px;color:var(--gr)">Add-ons (+)</span><span style="color:var(--gr);font-weight:700">+'+fm(_daddon)+'</span></div>';
+      if(_ddisc>0)h+='<div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:11px;color:var(--or)">Discount (−)</span><span style="color:var(--or);font-weight:700">−'+fm(_ddisc)+'</span></div>';
+      if(_daddon>0||_ddisc>0)h+='<div style="display:flex;justify-content:space-between;border-top:1px solid rgba(200,80,160,.15);padding-top:4px;margin-top:4px"><span style="font-size:11px;color:#c04080;font-weight:700">Net Payable</span><span style="color:#c04080;font-weight:800">'+fm(_dadjFin)+'</span></div>';
+      h+='</div>';
+    }
+    h+='<div style="font-size:9px;font-weight:700;letter-spacing:1px;color:#c04080;text-transform:uppercase;margin-bottom:6px">Payment History</div>';
+    var _dstages=[{k:'finalised',l:'Total Finalised',d:_df,isTotal:true},{k:'pay1',l:'1st Payment',d:_dp1},{k:'pay2',l:'2nd Payment',d:_dp2},{k:'pay3',l:'3rd Payment',d:_dp3},{k:'pay4',l:'4th Payment',d:_dp4}];
     _dstages.forEach(function(s){
       var amt=Number(s.d.amount)||0;
-      h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(200,80,160,.12)">';
-      h+='<span style="font-size:11px;color:var(--cr)">'+s.l+'</span>';
-      if(amt>0){h+='<div style="text-align:right"><span style="color:#c04080;font-weight:700;font-size:12px">'+fm(amt)+'</span>'+(s.d.date?'<div style="font-size:9px;color:var(--mu)">'+fd(s.d.date)+'</div>':'')+'</div>';}
-      else h+='<span style="color:var(--mu);font-size:11px">—</span>';
+      if(s.isTotal&&amt===0)return;
+      h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(200,80,160,.1)">';
+      h+='<span style="font-size:11px;color:'+(s.isTotal?'#c04080':'var(--cr)')+'">'+s.l+'</span>';
+      if(amt>0){
+        h+='<div style="text-align:right"><span style="color:'+(s.isTotal?'#c04080':'var(--gr)')+';font-weight:700;font-size:12px">'+fm(amt)+'</span>';
+        if(s.d.date)h+='<div style="font-size:9px;color:var(--mu)">'+fd(s.d.date)+'</div>';
+        if(s.d.receivedBy)h+='<div style="font-size:9px;color:var(--mu)">By: '+xe(s.d.receivedBy)+(s.d.mode?' • '+xe(s.d.mode):'')+'</div>';
+        h+='</div>';
+      }else h+='<span style="color:var(--mu);font-size:11px">—</span>';
       h+='</div>';
     });
-    h+='<div style="display:flex;justify-content:space-between;padding:7px 0;margin-top:2px">';
+    h+='<div style="display:flex;justify-content:space-between;padding:7px 0;margin-top:2px;border-top:2px solid rgba(200,80,160,.2)">';
     h+='<span style="font-weight:800;font-size:12px;color:#c04080">Total Paid</span>';
-    h+='<div style="text-align:right"><span style="color:#c04080;font-weight:800;font-size:14px">'+fm(_dtotal)+'</span>';
-    if(_dbal>0)h+='<div style="font-size:10px;color:var(--rd)">Due: '+fm(_dbal)+'</div>';
-    else h+='<div style="font-size:10px;color:var(--gr)">&#10003; Cleared</div>';
+    h+='<div style="text-align:right"><span style="color:'+((_dbal>0)?'var(--gr)':'var(--gr)')+';font-weight:800;font-size:14px">'+fm(_dtotal)+'</span>';
+    if(_dbal>0)h+='<div style="font-size:10px;color:var(--rd);font-weight:700">Balance Due: '+fm(_dbal)+'</div>';
+    else if(_dtotal>0)h+='<div style="font-size:10px;color:var(--gr)">&#10003; Cleared</div>';
     h+='</div></div>';
-    h+=pbar(_dtotal,_dbudget,_dbal===0?'var(--gr)':'#e060a0','rgba(200,80,160,.1)');
+    if(_dadjFin>0)h+=pbar(_dtotal,_dadjFin,_dbal===0?'var(--gr)':'#e060a0','rgba(200,80,160,.1)');
+    // Follow-up date
+    if(_dec.followUpDate){var _fdu=daysto(_dec.followUpDate);h+='<div style="margin-top:6px;padding:6px 10px;border-radius:6px;background:'+(_fdu<0?'var(--rF)':_fdu===0?'rgba(208,112,48,.12)':'var(--blF)')+';font-size:11px;color:'+(_fdu<0?'var(--rd)':_fdu===0?'var(--or)':'var(--bl)')+'">&#128197; Decor Payment Follow-up: '+fd(_dec.followUpDate)+(_fdu===0?' (TODAY!)':_fdu<0?' (OVERDUE!)':'')+'</div>';}
+    // WhatsApp payment due follow-up
+    if(b.phone&&_dbal>0){
+      var _waFup='*Alangaram Events & Decor*\n\nDear *'+xe(b.name)+'*,\n\n💳 *Decoration Payment Reminder*\n\n🌸 Total: *'+fm(_dadjFin||_dfin)+'*\n✅ Paid: *'+fm(_dtotal)+'*\n⏳ *Balance Due: '+fm(_dbal)+'*\n\nKindly settle the balance at the earliest.\n\nThank you for choosing Alangaram Events!\n📞 80811 11114';
+      h+='<a class="btn bwa sm" style="margin-top:8px;text-decoration:none;display:inline-flex;align-items:center;gap:5px" href="https://wa.me/'+_bintl+'?text='+encodeURIComponent(_waFup)+'" target="_blank">&#128172; WA Payment Reminder</a>';
+    }
   }else{
     h+='<div style="text-align:center;padding:14px 0">';
     h+='<div style="color:var(--mu);font-size:12px;margin-bottom:10px">No decoration details added yet</div>';
@@ -1366,7 +1441,8 @@ function buildQuoteURL(src, type){
     'eb='+encodeURIComponent(isB?p2.ebAmt:0),
     'ex='+encodeURIComponent(isB?p2.extTotal:0),
     'grand='+encodeURIComponent(grand),
-    'sv='+encodeURIComponent(svcs.join(','))
+    'sv='+encodeURIComponent(svcs.join(',')),
+    'paid='+encodeURIComponent(isB?p2.paid:0)
   ];
   return 'https://yokesh707.github.io/evp-crm/quote.html?'+params.join('&');
 }
@@ -1379,7 +1455,7 @@ function sendQuoteWA(src, type){
   var name=src.name||'there';
   var fn=src.fnType||'event';
   var sd=src.startDate?new Date(src.startDate+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'}):'';
-  var msg='*EVP Rajeshwari Marriage Palace*\n_Managed by Alangaram Events_\n\nDear *'+name+'*,\n\nThank you for your interest! \u2728\n\nYour venue quotation is ready. Please tap the link below to view your personalized quotation with full rate breakdown, payment schedule and terms:\n\n\uD83D\uDCCB *View Your Quotation:*\n'+quoteUrl+'\n\nThis quotation is valid for 30 days.\n\nFor any queries, please contact us on WhatsApp or call +91 94440 12856.\n\n_\u2014 Alangaram Events | EVP Rajeshwari Marriage Palace_';
+  var msg='*EVP Rajeshwari Marriage Palace*\n_Managed by Alangaram Events_\n\nDear *'+name+'*,\n\nThank you for your interest! \u2728\n\nYour venue quotation is ready. Please tap the link below to view your personalized quotation with full rate breakdown, payment schedule and terms:\n\n\uD83D\uDCCB *View Your Quotation:*\n'+quoteUrl+'\n\nThis quotation is valid for 30 days.\n\nFor any queries, please contact us on WhatsApp or call +91 80811 11114.\n\n_\u2014 Alangaram Events | EVP Rajeshwari Marriage Palace_';
   window.open('https://wa.me/'+intl+'?text='+encodeURIComponent(msg),'_blank');
 }
 
@@ -1410,16 +1486,24 @@ function navBkg(id){
 
 function updDecorBalance(){
   var fin=Number((document.getElementById('bd-pf')||{}).value)||0;
+  var disc=Number((document.getElementById('bd-disc')||{}).value)||0;
+  var addon=Number((document.getElementById('bd-addon')||{}).value)||0;
   var p1=Number((document.getElementById('bd-p1')||{}).value)||0;
   var p2=Number((document.getElementById('bd-p2')||{}).value)||0;
-  var bal=Math.max(0,fin-p1-p2);
-  var ef=document.getElementById('db-fin'),ep1=document.getElementById('db-p1'),ep2=document.getElementById('db-p2'),eb=document.getElementById('db-bal');
-  if(ef)ef.textContent=fm(fin);
-  if(ep1)ep1.textContent='— '+fm(p1);
-  if(ep2)ep2.textContent='— '+fm(p2);
-  if(eb){eb.textContent=fm(bal);eb.style.color=bal>0?'var(--rd)':'var(--gr)';}
-  var bc=document.getElementById('decor-balance-card');
-  if(bc){var bt=bc.querySelector('span:last-child');if(bt)bt.style.color=bal>0?'var(--rd)':'var(--gr)';}
+  var p3=Number((document.getElementById('bd-p3')||{}).value)||0;
+  var p4=Number((document.getElementById('bd-p4')||{}).value)||0;
+  var totPaid=p1+p2+p3+p4;
+  var adjFin=Math.max(0,fin+addon-disc);
+  var bal=Math.max(0,adjFin-totPaid);
+  var c=bal>0?'var(--rd)':'var(--gr)';
+  var ef=document.getElementById('db-fin');if(ef)ef.textContent=fm(fin);
+  var etp=document.getElementById('db-totpaid');if(etp)etp.textContent='− '+fm(totPaid);
+  var ea=document.getElementById('db-addon');if(ea)ea.textContent='+ '+fm(addon);
+  var ar=document.getElementById('db-addon-row');if(ar)ar.style.display=addon>0?'flex':'none';
+  var edc=document.getElementById('db-disc');if(edc)edc.textContent='− '+fm(disc);
+  var dr=document.getElementById('db-disc-row');if(dr)dr.style.display=disc>0?'flex':'none';
+  var eb=document.getElementById('db-bal');if(eb){eb.textContent=fm(bal);eb.style.color=c;}
+  var el=document.getElementById('db-ballabel');if(el)el.style.color=c;
 }
 
 function recordBkgPayment(bid){
@@ -1446,25 +1530,30 @@ function saveBkgDecor(){
     if(!EDIT_ID){alert('No booking selected. Please close and try again.');return;}
     var b=fbkg(EDIT_ID);
     if(!b){alert('Booking not found. Please refresh.');return;}
+    function getPay(key){return {amount:Number((document.getElementById('bd-'+key)||{}).value)||0,date:(document.getElementById('bd-'+key+'d')||{}).value||'',receivedBy:(document.getElementById('bd-'+key+'-by')||{}).value||'',mode:(document.getElementById('bd-'+key+'-mode')||{}).value||''};}
     var decObj={
       budget:Number((document.getElementById('bd-budget')||{}).value)||0,
       agent:(document.getElementById('bd-agent')||{}).value||'',
       status:(document.getElementById('bd-status')||{}).value||'Pending',
+      discount:Number((document.getElementById('bd-disc')||{}).value)||0,
+      addon:Number((document.getElementById('bd-addon')||{}).value)||0,
+      followUpDate:(document.getElementById('bd-followup')||{}).value||'',
       notes:(document.getElementById('bd-notes')||{}).value||'',
       payments:{
         finalised:{amount:Number((document.getElementById('bd-pf')||{}).value)||0,date:(document.getElementById('bd-pfd')||{}).value||''},
-        production:{amount:Number((document.getElementById('bd-pp')||{}).value)||0,date:(document.getElementById('bd-ppd')||{}).value||''},
-        pay1:{amount:Number((document.getElementById('bd-p1')||{}).value)||0,date:(document.getElementById('bd-p1d')||{}).value||''},
-        pay2:{amount:Number((document.getElementById('bd-p2')||{}).value)||0,date:(document.getElementById('bd-p2d')||{}).value||''}
+        pay1:getPay('p1'),
+        pay2:getPay('p2'),
+        pay3:getPay('p3'),
+        pay4:getPay('p4')
       }
     };
     var updated=Object.assign({},b,{decor:decObj});
-    // Update local cache immediately so UI refreshes
     for(var i=0;i<DATA.bookings.length;i++){if(DATA.bookings[i].id===b.id){DATA.bookings[i]=updated;break;}}
     cloudSaveBooking(updated);
+    if(AUTH&&AUTH.key!=='0001')pushNotif('0001','Decor payment updated: '+b.name+' (Paid: '+fm(decorPaid(updated))+')','payment');
     var savedId=EDIT_ID;
     OV=null;EDIT_ID=null;FORM={};
-    alert('Decor saved successfully!');
+    alert('Decor saved!');
     navBkg(savedId);
   }catch(e){
     alert('Save error: '+e.message);
@@ -1472,6 +1561,16 @@ function saveBkgDecor(){
 }
 function openDecor(id){EDIT_ID=id;OV='bkg-decor';setTimeout(render,10);}
 function sendWA(id){var b=fbkg(id);if(b)sendQuoteWA(b,'booking');}
+function sendPayReminderWA(id){
+  var b=fbkg(id);if(!b)return;
+  var p=calcp(b);
+  if(p.bal<=0){alert('No balance due for this booking.');return;}
+  var ph=(b.phone||'').replace(/[^0-9]/g,'');
+  if(!ph){alert('No phone number.');return;}
+  var intl=ph.length>10&&ph.indexOf('91')===0?ph:'91'+ph;
+  var msg='*EVP Rajeshwari Marriage Palace*\n_Managed by Alangaram Events_\n\nDear *'+xe(b.name)+'*,\n\n💳 *Payment Reminder*\n\nEvent Date: '+fd(b.startDate)+'\n\nTotal Amount: *'+fm(p.grand)+'*\nAmount Paid: *'+fm(p.paid)+'*\n⏳ *Balance Due: '+fm(p.bal)+'*\n\nKindly arrange the balance payment before your event date.\n\nFor payment or queries:\n📞 80811 11114\n\n— Alangaram Events | EVP Rajeshwari';
+  window.open('https://wa.me/'+intl+'?text='+encodeURIComponent(msg),'_blank');
+}
 // ─────────────────────────────────────────────────────────────────────────────
 
 document.addEventListener('click',function(e){
@@ -1528,7 +1627,7 @@ document.addEventListener('click',function(e){
   if(act==='cal-prev'){if(UI.cM===0){UI.cM=11;UI.cY--;}else UI.cM--;if(UI.cY<2026||(UI.cY===2026&&UI.cM<5)){UI.cY=2026;UI.cM=5;}repage();return;}
   if(act==='cal-next'){if(UI.cM===11){UI.cM=0;UI.cY++;}else UI.cM++;if(UI.cY>2027||(UI.cY===2027&&UI.cM>11)){UI.cY=2027;UI.cM=11;}repage();return;}
   if(act==='cal-sel'){UI.cSel=(UI.cSel===d)?null:d;repage();return;}
-  if(act==='wa-lead'){var l2=flead(id);if(l2){var _lph=(l2.phone||'').split(';')[0].replace(/[^0-9]/g,'');if(!_lph){alert('No phone number for this lead.');return;}var _lurl='https://wa.me/'+((_lph.length>10&&_lph.indexOf('91')===0)?_lph:'91'+_lph)+'?text='+encodeURIComponent('Hi '+l2.name+', Greetings from EVP Rajeswari Marriage Palace! We would love to assist with your '+l2.fnType+' booking. Please contact us at 9444012856. — Alangaram Events');window.open(_lurl,'_blank');}return;}
+  if(act==='wa-lead'){var l2=flead(id);if(l2){var _lph=(l2.phone||'').split(';')[0].replace(/[^0-9]/g,'');if(!_lph){alert('No phone number for this lead.');return;}var _lurl='https://wa.me/'+((_lph.length>10&&_lph.indexOf('91')===0)?_lph:'91'+_lph)+'?text='+encodeURIComponent('Hi '+l2.name+', Greetings from EVP Rajeswari Marriage Palace! We would love to assist with your '+l2.fnType+' booking. Please contact us at 8081111114. — Alangaram Events');window.open(_lurl,'_blank');}return;}
   if(act==='wa-bkg'){var b2=fbkg(id);if(b2)window.open(buildWA(b2),'_blank');return;}
   if(act==='edit-bkg-decor'){EDIT_ID=id;OV='bkg-decor';render();return;}
   if(act==='save-bkg-decor'){saveBkgDecor();return;}
