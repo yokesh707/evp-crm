@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Book Your Event — EVP Rajeshwari Marriage Palace</title>
+<!-- No SDK needed — using Firebase REST API directly -->
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(135deg,#0F0804 0%,#1A0F08 50%,#0F0804 100%);min-height:100vh;color:#C8A870}
+.wrap{max-width:480px;margin:0 auto;padding:20px 16px 40px}
+.logo-wrap{text-align:center;padding:24px 0 8px}
+.logo-wrap img{height:70px;object-fit:contain}
+.logo-wrap h1{color:#E8B84B;font-size:22px;font-weight:800;margin-top:10px;letter-spacing:.3px}
+.logo-wrap p{color:#887060;font-size:12px;margin-top:4px}
+.card{background:rgba(26,15,8,.8);border:1px solid rgba(200,146,42,.2);border-radius:16px;padding:20px;margin-bottom:16px;backdrop-filter:blur(10px)}
+.sec-title{font-size:11px;font-weight:700;color:#E8B84B;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(200,146,42,.15)}
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:700;color:#887060;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+.inp,.sel,.ta{width:100%;background:rgba(15,8,4,.6);border:1px solid rgba(200,146,42,.25);border-radius:10px;padding:12px 14px;color:#C8A870;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.inp:focus,.sel:focus,.ta:focus{border-color:var(--gold,#E8B84B)}
+.ta{resize:vertical;min-height:80px;font-family:inherit}
+.sel{cursor:pointer}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.g2 .fg{margin-bottom:0}
+.req{color:#C84030}
+/* Date grid */
+.cal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cal-hdr button{background:rgba(200,146,42,.15);border:1px solid rgba(200,146,42,.25);border-radius:8px;padding:6px 12px;color:#E8B84B;cursor:pointer;font-size:14px}
+.cal-hdr span{color:#E8B84B;font-weight:700;font-size:15px}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:6px}
+.cal-day-lbl{text-align:center;font-size:10px;color:#665040;font-weight:700;padding:3px 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cd{border-radius:8px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1px solid transparent;transition:all .15s;position:relative}
+.cd:hover{background:rgba(200,146,42,.1)}
+.cd.muh{background:rgba(200,146,42,.12);border-color:rgba(200,146,42,.35)}
+.cd.muh .dn{color:#E8B84B;font-weight:800}
+.cd.booked{background:rgba(200,64,48,.08);opacity:.5;cursor:not-allowed}
+.cd.sel{background:rgba(200,146,42,.25);border-color:#E8B84B}
+.cd.sel .dn{color:#E8B84B;font-weight:800}
+.cd.past{opacity:.35;cursor:not-allowed}
+.cd.empty{cursor:default}
+.dn{font-size:13px;color:#887060}
+.mdot{width:4px;height:4px;border-radius:50%;background:#E8B84B;margin-top:1px}
+.bdot{width:4px;height:4px;border-radius:50%;background:#C84030;margin-top:1px}
+.cal-legend{display:flex;gap:12px;font-size:10px;color:#665040;margin-top:6px}
+.cal-legend span{display:flex;align-items:center;gap:4px}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+/* Selected date display */
+.sel-date{background:rgba(200,146,42,.1);border:1px solid rgba(200,146,42,.3);border-radius:10px;padding:12px;margin-bottom:14px;text-align:center;display:none}
+.sel-date .date-main{font-size:16px;font-weight:800;color:#E8B84B}
+.sel-date .date-sub{font-size:11px;color:#887060;margin-top:3px}
+.muh-detail{background:rgba(200,146,42,.07);border:1px solid rgba(200,146,42,.2);border-radius:8px;padding:10px;margin-top:8px;display:none}
+.muh-detail .muh-label{font-size:9px;font-weight:700;color:#E8B84B;margin-bottom:4px}
+.muh-detail .muh-val{font-size:13px;color:#C8A870}
+/* Event types */
+.evt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
+.evt-chip{background:rgba(15,8,4,.6);border:1px solid rgba(200,146,42,.2);border-radius:10px;padding:10px;text-align:center;cursor:pointer;transition:all .15s}
+.evt-chip:hover{background:rgba(200,146,42,.1)}
+.evt-chip.sel{background:rgba(200,146,42,.18);border-color:#E8B84B}
+.evt-chip .eci{font-size:22px;margin-bottom:4px}
+.evt-chip .ecl{font-size:11px;color:#C8A870;font-weight:600}
+/* Submit button */
+.submit-btn{width:100%;padding:16px;background:linear-gradient(135deg,#C8922A,#E8B84B);color:#1a0a00;font-size:16px;font-weight:800;border:none;border-radius:12px;cursor:pointer;letter-spacing:.5px;margin-top:4px;transition:opacity .15s}
+.submit-btn:hover{opacity:.9}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+/* Success screen */
+.success{display:none;text-align:center;padding:40px 20px}
+.success .si{font-size:60px;margin-bottom:16px}
+.success h2{color:#E8B84B;font-size:22px;margin-bottom:8px}
+.success p{color:#887060;font-size:13px;line-height:1.6}
+.success .wa-btn{display:inline-block;margin-top:20px;background:#25D366;color:#fff;padding:12px 24px;border-radius:10px;font-weight:700;text-decoration:none;font-size:14px}
+/* Error */
+.err{color:#C84030;font-size:11px;margin-top:4px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo-wrap">
+    <img src="https://crm.evpmarriagepalace.com/logo.png" onerror="this.style.display='none'" alt="EVP">
+    <h1>EVP Rajeshwari</h1>
+    <p>Marriage Palace · Enquiry Form</p>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success" id="success-screen">
+    <div class="si">🎉</div>
+    <h2>Enquiry Submitted!</h2>
+    <p>Thank you! Our team will contact you within <strong style="color:#E8B84B">2 hours</strong> to confirm availability and share the quotation.</p>
+    <p style="margin-top:12px">📞 For immediate assistance:<br><strong style="color:#E8B84B">+91 98765 43210</strong></p>
+    <a id="wa-confirm" href="#" class="wa-btn" target="_blank">💬 Chat on WhatsApp</a>
+    <div style="margin-top:16px"><a href="https://evpmarriagepalace.com" style="color:#887060;font-size:12px">← Back to Website</a></div>
+  </div>
+
+  <!-- FORM -->
+  <div id="form-wrap">
+    <!-- Contact Details -->
+    <div class="card">
+      <div class="sec-title">Your Details</div>
+      <div class="fg">
+        <label class="fl">Full Name <span class="req">*</span></label>
+        <input class="inp" id="f-name" placeholder="Your name" type="text">
+        <div class="err" id="err-name">Please enter your name</div>
+      </div>
+      <div class="g2">
+        <div class="fg">
+          <label class="fl">Phone <span class="req">*</span></label>
+          <input class="inp" id="f-phone" placeholder="Mobile number" type="tel" inputmode="tel">
+          <div class="err" id="err-phone">Enter valid number</div>
+        </div>
+        <div class="fg">
+          <label class="fl">WhatsApp</label>
+          <input class="inp" id="f-wa" placeholder="If different" type="tel" inputmode="tel">
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Email</label>
+        <input class="inp" id="f-email" placeholder="email@example.com" type="email" inputmode="email">
+      </div>
+    </div>
+
+    <!-- Event Type -->
+    <div class="card">
+      <div class="sec-title">Event Type <span class="req">*</span></div>
+      <div class="evt-grid" id="evt-grid">
+        <div class="evt-chip" data-type="Reception + Muhurtham" onclick="selEvt(this)"><div class="eci">💍</div><div class="ecl">Wedding / Muhurtham</div></div>
+        <div class="evt-chip" data-type="Reception" onclick="selEvt(this)"><div class="eci">🎊</div><div class="ecl">Reception</div></div>
+        <div class="evt-chip" data-type="Engagement" onclick="selEvt(this)"><div class="eci">💎</div><div class="ecl">Engagement</div></div>
+        <div class="evt-chip" data-type="Brahmin Wedding" onclick="selEvt(this)"><div class="eci">🙏</div><div class="ecl">Brahmin Wedding</div></div>
+        <div class="evt-chip" data-type="Birthday" onclick="selEvt(this)"><div class="eci">🎂</div><div class="ecl">Birthday</div></div>
+        <div class="evt-chip" data-type="Corporate Event" onclick="selEvt(this)"><div class="eci">💼</div><div class="ecl">Corporate Event</div></div>
+        <div class="evt-chip" data-type="Baby Shower" onclick="selEvt(this)"><div class="eci">👶</div><div class="ecl">Baby Shower</div></div>
+        <div class="evt-chip" data-type="Other" onclick="selEvt(this)"><div class="eci">✨</div><div class="ecl">Other Function</div></div>
+      </div>
+      <div class="err" id="err-type">Please select event type</div>
+    </div>
+
+    <!-- Date Selection -->
+    <div class="card">
+      <div class="sec-title">Preferred Date <span class="req">*</span></div>
+      <div class="cal-hdr">
+        <button onclick="prevMonth()">‹</button>
+        <span id="cal-title"></span>
+        <button onclick="nextMonth()">›</button>
+      </div>
+      <div class="cal-days">
+        <div class="cal-day-lbl">Su</div><div class="cal-day-lbl">Mo</div><div class="cal-day-lbl">Tu</div>
+        <div class="cal-day-lbl">We</div><div class="cal-day-lbl">Th</div><div class="cal-day-lbl">Fr</div><div class="cal-day-lbl">Sa</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-legend">
+        <span><div class="leg-dot" style="background:#E8B84B"></div> ௐ Muhurtham</span>
+        <span><div class="leg-dot" style="background:#C84030"></div> Already Booked</span>
+        <span><div class="leg-dot" style="background:rgba(200,146,42,.25);border:1px solid #E8B84B"></div> Selected</span>
+      </div>
+      <div class="sel-date" id="sel-date-box">
+        <div class="date-main" id="sel-date-main"></div>
+        <div class="date-sub" id="sel-date-sub"></div>
+        <div class="muh-detail" id="muh-detail-box">
+          <div class="muh-label">ௐ நல்ல முகூர்த்த நாள் Details</div>
+          <div id="muh-detail-text" class="muh-val"></div>
+        </div>
+      </div>
+      <div class="err" id="err-date">Please select a date</div>
+    </div>
+
+    <!-- Event Details -->
+    <div class="card">
+      <div class="sec-title">Event Details</div>
+      <div class="g2">
+        <div class="fg">
+          <label class="fl">Approx. Guests</label>
+          <input class="inp" id="f-guests" placeholder="e.g. 500" type="number" inputmode="numeric">
+        </div>
+        <div class="fg">
+          <label class="fl">Duration</label>
+          <select class="sel" id="f-duration">
+            <option value="">Select</option>
+            <option>Half Day (12 hrs)</option>
+            <option>Full Day (24 hrs)</option>
+            <option>1.5 Days</option>
+            <option>2 Days</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Services Needed</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px" id="svcs">
+          <label style="display:flex;align-items:center;gap:5px;background:rgba(200,146,42,.08);border:1px solid rgba(200,146,42,.2);border-radius:7px;padding:6px 10px;cursor:pointer;font-size:12px"><input type="checkbox" value="Decoration / Alangaram"> Decoration</label>
+          <label style="display:flex;align-items:center;gap:5px;background:rgba(200,146,42,.08);border:1px solid rgba(200,146,42,.2);border-radius:7px;padding:6px 10px;cursor:pointer;font-size:12px"><input type="checkbox" value="Catering"> Catering</label>
+          <label style="display:flex;align-items:center;gap:5px;background:rgba(200,146,42,.08);border:1px solid rgba(200,146,42,.2);border-radius:7px;padding:6px 10px;cursor:pointer;font-size:12px"><input type="checkbox" value="Photography"> Photography</label>
+          <label style="display:flex;align-items:center;gap:5px;background:rgba(200,146,42,.08);border:1px solid rgba(200,146,42,.2);border-radius:7px;padding:6px 10px;cursor:pointer;font-size:12px"><input type="checkbox" value="DJ"> DJ</label>
+          <label style="display:flex;align-items:center;gap:5px;background:rgba(200,146,42,.08);border:1px solid rgba(200,146,42,.2);border-radius:7px;padding:6px 10px;cursor:pointer;font-size:12px"><input type="checkbox" value="Mehendi"> Mehendi</label>
+        </div>
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <label class="fl">Message / Special Requirements</label>
+        <textarea class="ta" id="f-msg" placeholder="Any special requests, budget range, or questions for us..."></textarea>
+      </div>
+    </div>
+
+    <!-- How did you hear -->
+    <div class="card">
+      <div class="sec-title">How did you hear about us?</div>
+      <select class="sel" id="f-source">
+        <option value="">Select source</option>
+        <option>Google Search</option>
+        <option>Instagram</option>
+        <option>Facebook</option>
+        <option>JustDial</option>
+        <option>Friend / Referral</option>
+        <option>Walk-in</option>
+        <option>Attended Event Here</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitEnquiry()">
+      Send Enquiry →
+    </button>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:#665040">
+      By submitting, you agree to be contacted by EVP Rajeshwari team.
+    </div>
+  </div>
+</div>
+
+<script>
+var DB_URL = "https://evp-crm-default-rtdb.asia-southeast1.firebasedatabase.app";
+
+// Firebase REST API helpers
+async function dbGet(path){
+  var r=await fetch(DB_URL+path+'.json');return r.ok?r.json():null;
+}
+async function dbSet(path,data){
+  var r=await fetch(DB_URL+path+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});return r.ok;
+}
+async function dbPush(path,data){
+  var r=await fetch(DB_URL+path+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});return r.ok;
+}
+
+// ── MUHURTHAM DATES ──────────────────────────────────────────────────────────
+var MUH_INFO={
+  '2026-04-20':{star:'ரோகிணி',t:'திருதியை',m:'9:30 - 10:30',p:'V'},
+  '2026-04-23':{star:'புனர்பூசம்',t:'சப்தமி',m:'7:30 - 9:00 / 12:00 - 1:00',p:'V'},
+  '2026-04-30':{star:'சித்திரை',t:'சதுர்த்தி',m:'5:00 - 6:00 / 10:30 - 11:00',p:'V'},
+  '2026-05-08':{star:'உ.திரோடம்',t:'சஷ்டி',m:'9:10 - 10:15',p:'T'},
+  '2026-05-13':{star:'உ.திரட்டாதி',t:'ஏகாதசி',m:'10:00 - 10:30',p:'T'},
+  '2026-05-18':{star:'ரோகிணி',t:'துவிதியை',m:'9:50 - 10:30',p:'V'},
+  '2026-05-25':{star:'உத்திரம்',t:'நவமி',m:'9:30 - 10:30',p:'V'},
+  '2026-05-28':{star:'சித்திரை',t:'துவாதசி',m:'5:00 - 6:00',p:'V'},
+  '2026-05-29':{star:'சுவாதி',t:'திரயோதசி',m:'5:00 - 6:00',p:'V'},
+  '2026-06-04':{star:'உ.திரோடம்',t:'சதுர்த்தி',m:'10:30 - 11:00',p:'T'},
+  '2026-06-11':{star:'அஸ்வினி',t:'ஏகாதசி',m:'8:15 - 9:00',p:'V'},
+  '2026-06-17':{star:'புனர்பூசம்',t:'திரயோதசி',m:'9:00 - 10:00',p:'V'},
+  '2026-06-18':{star:'பூசம்',t:'சதுர்த்தி',m:'8:00 - 9:00',p:'V'},
+  '2026-06-24':{star:'சித்திரை',t:'நவமி',m:'9:00 - 9:30',p:'V'},
+  '2026-06-25':{star:'சுவாதி',t:'தசமி',m:'5:15 - 6:00',p:'V'},
+  '2026-07-05':{star:'சதயம்',t:'பஞ்சமி',m:'7:00 - 8:30',p:'T'},
+  '2026-07-12':{star:'மிருகசீரிஷம்',t:'திரயோதசி',m:'7:15 - 8:15',p:'T'},
+  '2026-08-23':{star:'மூலம்',t:'ஏகாதசி',m:'10:00 - 11:30',p:'V'},
+  '2026-08-30':{star:'உ.திரட்டாதி',t:'துவிதியை',m:'9:30 - 11:00',p:'T'},
+  '2026-08-31':{star:'ரேவதி',t:'சதுர்த்தி',m:'9:30 - 10:30',p:'T'},
+  '2026-09-07':{star:'புனர்பூசம்',t:'ஏகாதசி',m:'9:00 - 10:30',p:'V'},
+  '2026-10-25':{star:'ரேவதி',t:'பஞ்சமி',m:'9:00 - 9:45',p:'V'},
+  '2026-10-30':{star:'மிருகசீரிஷம்',t:'பஞ்சமி',m:'9:45 - 10:30',p:'T'},
+  '2026-11-01':{star:'புனர்பூசம்',t:'சப்தமி',m:'9:30 - 10:30',p:'V'},
+  '2026-11-11':{star:'அனுஷம்',t:'துவிதியை',m:'9:00 - 10:30',p:'V'},
+  '2026-11-13':{star:'மூலம்',t:'சதுர்த்தி',m:'5:00 - 6:15',p:'V'},
+  '2026-11-15':{star:'உ.திரோடம்',t:'சஷ்டி',m:'6:30 - 8:30',p:'V'},
+  '2026-11-16':{star:'திருவோணம்',t:'சப்தமி',m:'6:30 - 7:30',p:'V'},
+  '2026-11-20':{star:'உ.திரட்டாதி',t:'ஏகாதசி',m:'9:00 - 10:15',p:'V'},
+  '2026-11-22':{star:'அஸ்வினி',t:'திரயோதசி',m:'6:00 - 7:30',p:'V'},
+  '2026-11-29':{star:'பூசம்',t:'பஞ்சமி',m:'8:00 - 9:30',p:'T'},
+  '2026-12-04':{star:'ஹஸ்தம்',t:'ஏகாதசி',m:'9:00 - 9:20',p:'T'},
+  '2026-12-14':{star:'அவிட்டம்',t:'பஞ்சமி',m:'12:00 - 12:20',p:'V'},
+  '2027-01-20':{star:'மிருகசீரிஷம்',t:'திரயோதசி',m:'9:00 - 9:45',p:'T'},
+  '2027-02-08':{star:'சதயம்',t:'நவமி',m:'10:00 - 10:15',p:'T'},
+  '2027-02-10':{star:'உ.திரட்டாதி',t:'ஏகாதசி',m:'6:50 - 7:30',p:'T'},
+  '2027-02-11':{star:'ரேவதி',t:'துவாதசி',m:'10:30 - 11:30',p:'T'},
+  '2027-02-26':{star:'சுவாதி',t:'சஷ்டி',m:'12:00 - 12:45',p:'T'},
+  '2027-03-10':{star:'உ.திரோடம்',t:'துவிதியை',m:'5:30 - 6:30',p:'V'},
+  '2027-03-14':{star:'ரோகிணி',t:'சஷ்டி',m:'9:30 - 9:50',p:'V'},
+  '2027-03-17':{star:'புனர்பூசம்',t:'சஷ்டி',m:'9:45 - 10:30',p:'V'},
+  '2027-03-18':{star:'பூசம்',t:'ஏகாதசி',m:'8:00 - 9:00',p:'V'},
+  '2027-03-24':{star:'சித்திரை',t:'துவிதியை',m:'9:15 - 10:30',p:'T'},
+  '2027-04-04':{star:'சதயம்',t:'திரயோதசி',m:'5:15 - 6:45',p:'T'},
+  '2027-04-08':{star:'அஸ்வினி',t:'துவிதியை',m:'7:30 - 8:10',p:'V'},
+  '2027-04-11':{star:'ரோகிணி',t:'பஞ்சமி',m:'8:30 - 10:00',p:'V'},
+  '2027-04-12':{star:'மிருகசீரிஷம்',t:'சஷ்டி',m:'6:10 - 7:30',p:'V'}
+};
+var BOOKED_DATES={};
+
+// Load booked dates from Firebase REST API
+dbGet('/bookings').then(function(data){
+  if(data){Object.values(data).forEach(function(b){if(b.startDate)BOOKED_DATES[b.startDate]=true;if(b.endDate)BOOKED_DATES[b.endDate]=true;});}
+  renderCal();
+}).catch(function(){renderCal();});
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+var CAL={y:0,m:0};var SEL_DATE='';var SEL_TYPE='';
+var d0=new Date();CAL.y=d0.getFullYear();CAL.m=d0.getMonth();
+
+function today(){return new Date().toISOString().slice(0,10);}
+function fd(d){if(!d)return'';var p=d.split('-');var dt=new Date(+p[0],+p[1]-1,+p[2]);return dt.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric',weekday:'long'});}
+
+function selEvt(el){
+  document.querySelectorAll('.evt-chip').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');SEL_TYPE=el.dataset.type;
+  document.getElementById('err-type').style.display='none';
+}
+
+function prevMonth(){if(CAL.m===0){CAL.m=11;CAL.y--;}else CAL.m--;renderCal();}
+function nextMonth(){if(CAL.m===11){CAL.m=0;CAL.y++;}else CAL.m++;renderCal();}
+
+function renderCal(){
+  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-title').textContent=months[CAL.m]+' '+CAL.y;
+  var first=new Date(CAL.y,CAL.m,1).getDay();
+  var days=new Date(CAL.y,CAL.m+1,0).getDate();
+  var todayStr=today();
+  var h='';
+  for(var i=0;i<first;i++)h+='<div class="cd empty"></div>';
+  for(var d=1;d<=days;d++){
+    var ds=CAL.y+'-'+String(CAL.m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var isMuh=!!MUH_INFO[ds];var isBooked=!!BOOKED_DATES[ds];var isPast=ds<todayStr;var isSel=ds===SEL_DATE;
+    var cls='cd'+(isMuh?' muh':'')+(isBooked?' booked':'')+(isPast?' past':'')+(isSel?' sel':'');
+    var dot=isMuh?'<div class="mdot"></div>':(isBooked?'<div class="bdot"></div>':'');
+    var click=(isPast||isBooked)?'':" onclick=\"selectDate('"+ds+"')\"";
+    h+='<div class="'+cls+'"'+click+'><span class="dn">'+d+'</span>'+dot+'</div>';
+  }
+  document.getElementById('cal-grid').innerHTML=h;
+}
+
+function selectDate(d){
+  SEL_DATE=d;renderCal();
+  var box=document.getElementById('sel-date-box');
+  var mainEl=document.getElementById('sel-date-main');
+  var subEl=document.getElementById('sel-date-sub');
+  var muhBox=document.getElementById('muh-detail-box');
+  var muhTxt=document.getElementById('muh-detail-text');
+  box.style.display='block';
+  mainEl.textContent=fd(d);
+  document.getElementById('err-date').style.display='none';
+  if(MUH_INFO[d]){
+    var mi=MUH_INFO[d];
+    subEl.textContent='ௐ Tamil Muhurtham Date — '+(mi.p==='V'?'வளர்பிறை':'தேய்பிறை');
+    muhBox.style.display='block';
+    muhTxt.innerHTML='<strong>'+mi.star+'</strong> | '+mi.t+'<br>⏰ Nalla Neram: <strong>'+mi.m+'</strong>';
+  }else{
+    subEl.textContent='Regular date — No muhurtham';
+    muhBox.style.display='none';
+  }
+}
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+
+function validate(){
+  var ok=true;
+  var name=document.getElementById('f-name').value.trim();
+  var phone=document.getElementById('f-phone').value.trim();
+  if(!name){document.getElementById('err-name').style.display='block';ok=false;}
+  else document.getElementById('err-name').style.display='none';
+  if(!phone||phone.length<10){document.getElementById('err-phone').style.display='block';ok=false;}
+  else document.getElementById('err-phone').style.display='none';
+  if(!SEL_TYPE){document.getElementById('err-type').style.display='block';ok=false;}
+  else document.getElementById('err-type').style.display='none';
+  if(!SEL_DATE){document.getElementById('err-date').style.display='block';ok=false;}
+  else document.getElementById('err-date').style.display='none';
+  return ok;
+}
+
+function submitEnquiry(){
+  if(!validate())return;
+  var btn=document.getElementById('submit-btn');
+  btn.disabled=true;btn.textContent='Submitting...';
+  var svcs=[];document.querySelectorAll('#svcs input:checked').forEach(function(c){svcs.push(c.value);});
+  var lead={
+    id:uid(),
+    name:document.getElementById('f-name').value.trim(),
+    phone:document.getElementById('f-phone').value.trim(),
+    waPhone:document.getElementById('f-wa').value.trim()||document.getElementById('f-phone').value.trim(),
+    email:document.getElementById('f-email').value.trim(),
+    fnType:SEL_TYPE,
+    startDate:SEL_DATE,
+    isMuhurtham:!!MUH_INFO[SEL_DATE],
+    guests:document.getElementById('f-guests').value||'',
+    duration:document.getElementById('f-duration').value||'',
+    services:svcs.join(', '),
+    message:document.getElementById('f-msg').value.trim(),
+    source:document.getElementById('f-source').value||'Website Enquiry',
+    status:'new',
+    createdAt:new Date().toISOString(),
+    enquirySource:'Website Form'
+  };
+  var notif={msg:'📋 New enquiry: '+lead.name+' for '+lead.fnType+' on '+SEL_DATE,type:'lead',time:new Date().toISOString(),read:false};
+  Promise.all([
+    dbSet('/leads/'+lead.id, lead),
+    dbPush('/notifs/0001', notif),
+    dbPush('/notifs/0002', notif)
+  ]).then(function(){
+    document.getElementById('form-wrap').style.display='none';
+    document.getElementById('success-screen').style.display='block';
+    var waNum='919080036010';
+    var waMsg=encodeURIComponent('Hi! I just submitted an enquiry on your website for '+lead.fnType+' on '+SEL_DATE+'. My name is '+lead.name+'. Please confirm availability and share the quotation.');
+    document.getElementById('wa-confirm').href='https://wa.me/'+waNum+'?text='+waMsg;
+  }).catch(function(){
+    btn.disabled=false;btn.textContent='Send Enquiry →';
+    alert('Submission failed. Please check internet and try again.');
+  });
+}
+
+// Init calendar
+renderCal();
+</script>
+</body>
+</html>
